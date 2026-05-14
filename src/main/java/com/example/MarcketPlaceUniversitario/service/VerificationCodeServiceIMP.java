@@ -66,10 +66,12 @@ public class VerificationCodeServiceIMP
         SimpleMailMessage message =
                 new SimpleMailMessage();
 
+        message.setFrom("onboarding@resend.dev");
+
         message.setTo(correo);
 
         message.setSubject(
-                "Código de verificación"
+                "Código de verificación - UniMarket"
         );
 
         message.setText(
