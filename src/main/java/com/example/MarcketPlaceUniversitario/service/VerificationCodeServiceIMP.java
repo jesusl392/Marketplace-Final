@@ -10,9 +10,12 @@ import com.example.MarcketPlaceUniversitario.model.VerificationCode;
 import com.example.MarcketPlaceUniversitario.repository.UsuarioRepository;
 import com.example.MarcketPlaceUniversitario.repository.VerificationCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -27,8 +30,10 @@ public class VerificationCodeServiceIMP
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    @Value("${resend.api.key}")
+    private String resendApiKey;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public String sendCode(SendCodeRequestDTO dto) {
@@ -62,24 +67,20 @@ public class VerificationCodeServiceIMP
 
         verificationCodeRepository.save(verificationCode);
 
-        // enviar email
-        SimpleMailMessage message =
-                new SimpleMailMessage();
+        // enviar email via Resend API
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(resendApiKey);
 
-        message.setFrom("onboarding@resend.dev");
-
-        message.setTo(correo);
-
-        message.setSubject(
-                "Código de verificación - UniMarket"
+        Map<String, Object> body = Map.of(
+                "from",    "onboarding@resend.dev",
+                "to",      new String[]{correo},
+                "subject", "Código de verificación - UniMarket",
+                "text",    "Tu código de verificación es: " + codigo + "\n\nEste código expira en 5 minutos."
         );
 
-        message.setText(
-                "Tu código de verificación es: "
-                        + codigo
-        );
-
-        mailSender.send(message);
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+        restTemplate.postForEntity("https://api.resend.com/emails", request, String.class);
 
         return "Código enviado correctamente";
     }
