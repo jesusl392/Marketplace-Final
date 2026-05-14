@@ -28,13 +28,6 @@ public class UsuarioServiceIMP implements UsuarioService{
         @Override
         public UsuarioResponseDTO save(UsuarioRequestDTO dto) {
 
-            // Validar dominio institucional
-            if (!dto.getCorreo().endsWith("@ucundinamarca.edu.co")) {
-                throw new RuntimeException(
-                        "Correo institucional inválido"
-                );
-            }
-
             Usuario usuario = new Usuario();
 
             usuario.setNombre(dto.getNombre());

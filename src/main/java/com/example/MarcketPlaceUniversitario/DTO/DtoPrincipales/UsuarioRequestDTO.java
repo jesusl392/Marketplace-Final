@@ -11,10 +11,7 @@ public class UsuarioRequestDTO {
     private String nombre;
 
     @NotBlank(message = "El correo es obligatorio")
-    @Pattern(
-            regexp = "^[A-Za-z0-9._%+-]+@ucundinamarca\\.edu\\.co$",
-            message = "Debe usar un correo institucional"
-    )
+    @Email(message = "El correo no es valido")
     private String correo;
 
     @NotBlank(message = "La contraseña es obligatoria")
