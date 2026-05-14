@@ -13,15 +13,30 @@ public class MarcketPlaceUniversitarioApplication {
 		System.out.println("MarcketPlaceUniversitarioApplication started");
 	}
 	private static void loadEnv(){
-		Dotenv dotenv = Dotenv.load();
-		System.setProperty("DB_URL",dotenv.get("DB_URL"));
-		System.setProperty("DB_USERNAME",dotenv.get("DB_USERNAME"));
-		System.setProperty("DB_PASSWORD",dotenv.get("DB_PASSWORD"));
-		System.setProperty("CLOUDINARY_CLOUD_NAME", dotenv.get("CLOUDINARY_CLOUD_NAME"));
-		System.setProperty("CLOUDINARY_API_KEY",    dotenv.get("CLOUDINARY_API_KEY"));
-		System.setProperty("CLOUDINARY_API_SECRET", dotenv.get("CLOUDINARY_API_SECRET"));
-		System.setProperty("MAIL_USERNAME", dotenv.get("MAIL_USERNAME"));
-		System.setProperty("MAIL_PASSWORD", dotenv.get("MAIL_PASSWORD"));
+		// En Render el Secret File está en /etc/secrets/.env
+		// En local está en la raíz del proyecto
+		Dotenv dotenv = Dotenv.configure()
+				.directory("/etc/secrets")
+				.ignoreIfMissing()
+				.load();
+
+		// Si no encontró variables (estamos en local), cargar desde raíz
+		if (dotenv.get("DB_URL") == null) {
+			dotenv = Dotenv.configure().ignoreIfMissing().load();
+		}
+
+		setIfPresent(dotenv, "DB_URL");
+		setIfPresent(dotenv, "DB_USERNAME");
+		setIfPresent(dotenv, "DB_PASSWORD");
+		setIfPresent(dotenv, "CLOUDINARY_CLOUD_NAME");
+		setIfPresent(dotenv, "CLOUDINARY_API_KEY");
+		setIfPresent(dotenv, "CLOUDINARY_API_SECRET");
+		setIfPresent(dotenv, "RESEND_API_KEY");
+	}
+
+	private static void setIfPresent(Dotenv dotenv, String key) {
+		String value = dotenv.get(key);
+		if (value != null) System.setProperty(key, value);
 	}
 
 
