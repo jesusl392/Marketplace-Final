@@ -31,7 +31,7 @@ public class MarcketPlaceUniversitarioApplication {
 		setIfPresent(dotenv, "CLOUDINARY_CLOUD_NAME");
 		setIfPresent(dotenv, "CLOUDINARY_API_KEY");
 		setIfPresent(dotenv, "CLOUDINARY_API_SECRET");
-		setIfPresent(dotenv, "RESEND_API_KEY");
+		setIfPresent(dotenv, "BREVO_API_KEY");
 	}
 
 	private static void setIfPresent(Dotenv dotenv, String key) {

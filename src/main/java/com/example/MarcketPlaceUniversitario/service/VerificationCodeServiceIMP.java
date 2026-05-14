@@ -30,8 +30,8 @@ public class VerificationCodeServiceIMP
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Value("${resend.api.key}")
-    private String resendApiKey;
+    @Value("${brevo.api.key}")
+    private String brevoApiKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -67,20 +67,23 @@ public class VerificationCodeServiceIMP
 
         verificationCodeRepository.save(verificationCode);
 
-        // enviar email via Resend API
+        // enviar email via Brevo API
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(resendApiKey);
+        headers.set("api-key", brevoApiKey);
+
+        Map<String, Object> sender = Map.of("name", "UniMarket", "email", "unimarketudec@gmail.com");
+        Map<String, Object> destinatario = Map.of("email", correo);
 
         Map<String, Object> body = Map.of(
-                "from",    "onboarding@resend.dev",
-                "to",      new String[]{correo},
-                "subject", "Código de verificación - UniMarket",
-                "text",    "Tu código de verificación es: " + codigo + "\n\nEste código expira en 5 minutos."
+                "sender",      sender,
+                "to",          new Object[]{destinatario},
+                "subject",     "Código de verificación - UniMarket",
+                "textContent", "Tu código de verificación es: " + codigo + "\n\nEste código expira en 5 minutos."
         );
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-        restTemplate.postForEntity("https://api.resend.com/emails", request, String.class);
+        restTemplate.postForEntity("https://api.brevo.com/v3/smtp/email", request, String.class);
 
         return "Código enviado correctamente";
     }
