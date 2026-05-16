@@ -32,6 +32,8 @@
         private String estado; //activo,vendido,eliminado
         @Column
         private LocalDate fechaPublicacion;
+        @Column
+        private String ubicacion;
 
 
 

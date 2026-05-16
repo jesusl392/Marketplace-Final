@@ -21,5 +21,7 @@ public class PostResponseDTO {
     private LocalDate fechaPublicacion;
     private Long usuarioId;
     private String usuarioNombre;
+    private String usuarioFoto;
+    private String ubicacion;
     private List<PostImagenResponseDTO> imagenes;
 }

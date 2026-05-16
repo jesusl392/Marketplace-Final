@@ -35,6 +35,7 @@ public class PostsServiceIMP implements PostsService {
         post.setPrecio(dto.getPrecio());
         post.setCategoria(dto.getCategoria());
         post.setEstado(dto.getEstado() != null ? dto.getEstado() : "activo");
+        post.setUbicacion(dto.getUbicacion());
         post.setFechaPublicacion(LocalDate.now());
         post.setUsuario(usuario);
 
@@ -51,6 +52,7 @@ public class PostsServiceIMP implements PostsService {
         existente.setPrecio(dto.getPrecio());
         existente.setCategoria(dto.getCategoria());
         if (dto.getEstado() != null) existente.setEstado(dto.getEstado());
+        if (dto.getUbicacion() != null) existente.setUbicacion(dto.getUbicacion());
 
         return toDTO(postRepository.save(existente));
     }
@@ -93,6 +95,8 @@ public class PostsServiceIMP implements PostsService {
                 post.getFechaPublicacion(),
                 post.getUsuario().getId(),
                 post.getUsuario().getNombre(),
+                post.getUsuario().getFotoPerfil(),
+                post.getUbicacion(),
                 imagenes
         );
     }

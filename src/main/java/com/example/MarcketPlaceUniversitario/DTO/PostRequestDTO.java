@@ -23,6 +23,8 @@ public class PostRequestDTO {
 
     private String estado;
 
+    private String ubicacion;
+
     @NotNull(message = "El id del usuario es obligatorio")
     private Long usuarioId;
 }
