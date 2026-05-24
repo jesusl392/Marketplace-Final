@@ -76,4 +76,14 @@ public class UsuarioController {
         usuarioRepository.save(u);
         return ResponseEntity.ok(url);
     }
+
+    /** Elimina la foto de perfil (la pone en null) */
+    @DeleteMapping("/{id}/foto")
+    public ResponseEntity<Void> eliminarFoto(@PathVariable Long id) {
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + id));
+        u.setFotoPerfil(null);
+        usuarioRepository.save(u);
+        return ResponseEntity.noContent().build();
+    }
 }

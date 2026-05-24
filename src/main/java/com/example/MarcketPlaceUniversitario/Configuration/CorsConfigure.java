@@ -15,7 +15,12 @@ public class CorsConfigure {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
                         .allowedOrigins("*")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
+                        .allowedHeaders("*");
+                // Handshake WebSocket HTTP→WS
+                registry.addMapping("/ws/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST")
                         .allowedHeaders("*");
             }
         };

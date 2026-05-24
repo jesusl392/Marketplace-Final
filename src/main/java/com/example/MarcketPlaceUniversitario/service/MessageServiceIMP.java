@@ -6,6 +6,8 @@ import com.example.MarcketPlaceUniversitario.model.Message;
 import com.example.MarcketPlaceUniversitario.model.Usuario;
 import com.example.MarcketPlaceUniversitario.repository.MessageRepository;
 import com.example.MarcketPlaceUniversitario.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +19,9 @@ public class MessageServiceIMP implements MessageService {
 
     private final MessageRepository messageRepository;
     private final UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     public MessageServiceIMP(MessageRepository messageRepository, UsuarioRepository usuarioRepository) {
         this.messageRepository = messageRepository;
@@ -37,7 +42,12 @@ public class MessageServiceIMP implements MessageService {
         message.setLeido(false);
         message.setDateTime(LocalDateTime.now());
 
-        return toDTO(messageRepository.save(message));
+        MessageResponseDTO saved = toDTO(messageRepository.save(message));
+
+        // Broadcast en tiempo real al destinatario vía WebSocket STOMP
+        messagingTemplate.convertAndSend("/topic/user/" + dto.getReceiverId(), saved);
+
+        return saved;
     }
 
     @Override
