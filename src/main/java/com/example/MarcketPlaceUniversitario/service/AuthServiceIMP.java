@@ -117,7 +117,8 @@ public class AuthServiceIMP implements AuthService {
                 usuario.getNombre(),
                 usuario.getCorreo(),
                 usuario.getRol(),
-                usuario.getEstado()
+                usuario.getEstado(),
+                usuario.getAdmin() != null && usuario.getAdmin()
         );
     }
 }

@@ -11,4 +11,5 @@ public class LoginResponseDTO {
     private String correo;
     private String rol;
     private boolean estado;
+    private boolean admin;
 }

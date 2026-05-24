@@ -33,6 +33,9 @@ public class Usuario {
     private Boolean estado;
     @Column (nullable = false)
     private LocalDate fechaRegistro;
+    // Acceso a la app de administrador — se cambia manualmente en la BD (por defecto false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private Boolean admin = false;
 
     @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL)
     @JsonManagedReference
