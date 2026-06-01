@@ -42,4 +42,9 @@ public class MessageController {
     public void eliminar(@PathVariable long id) {
         messageService.eliminar(id);
     }
+
+    @PatchMapping("/marcar-leidos")
+    public void marcarLeidos(@RequestParam Long senderId, @RequestParam Long receiverId) {
+        messageService.marcarLeidos(senderId, receiverId);
+    }
 }

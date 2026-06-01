@@ -11,4 +11,5 @@ public interface MessageService {
     MessageResponseDTO buscarPorId(long id);
     MessageResponseDTO actualizar(MessageRequestDTO dto, long id);
     void eliminar(long id);
+    void marcarLeidos(Long senderId, Long receiverId);
 }

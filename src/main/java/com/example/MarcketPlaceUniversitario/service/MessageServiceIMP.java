@@ -76,6 +76,11 @@ public class MessageServiceIMP implements MessageService {
         messageRepository.deleteById(id);
     }
 
+    @Override
+    public void marcarLeidos(Long senderId, Long receiverId) {
+        messageRepository.marcarLeidos(senderId, receiverId);
+    }
+
     private MessageResponseDTO toDTO(Message m) {
         return new MessageResponseDTO(
                 m.getId(),
