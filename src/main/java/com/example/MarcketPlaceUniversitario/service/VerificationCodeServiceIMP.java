@@ -40,6 +40,11 @@ public class VerificationCodeServiceIMP
 
         String correo = dto.getCorreo().toLowerCase();
 
+        // validar dominio institucional
+        if (!correo.endsWith("@ucundinamarca.edu.co")) {
+            throw new RuntimeException("Solo se permiten correos institucionales (@ucundinamarca.edu.co)");
+        }
+
         // validar correo repetido
         if (usuarioRepository.existsByCorreo(correo)) {
             throw new RuntimeException(

@@ -32,7 +32,7 @@ public class AuthServiceIMP implements AuthService {
         String correo = dto.getCorreo().toLowerCase();
 
         //validar Dominio Institucional
-        if (!correo.endsWith("@gmail.com")) {
+        if (!correo.endsWith("@ucundinamarca.edu.co")) {
             throw new RuntimeException("Correo Inválido");
         }
         //validar Repetido
